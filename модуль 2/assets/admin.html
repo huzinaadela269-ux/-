@@ -29,19 +29,19 @@
         </div>
         <div class="admin-stats">
             <div class="admin-stat">
-                <div class="admin-stat-number" id="statNew">3</div>
+                <div class="admin-stat-number" id="statNew">0</div>
                 <div class="admin-stat-label">Новые</div>
             </div>
             <div class="admin-stat">
-                <div class="admin-stat-number" id="statAssigned">2</div>
+                <div class="admin-stat-number" id="statAssigned">0</div>
                 <div class="admin-stat-label">Идет обучение</div>
             </div>
             <div class="admin-stat">
-                <div class="admin-stat-number" id="statCompleted">1</div>
+                <div class="admin-stat-number" id="statCompleted">0</div>
                 <div class="admin-stat-label">Обучение завершено</div>
             </div>
             <div class="admin-stat">
-                <div class="admin-stat-number" id="statTotal">6</div>
+                <div class="admin-stat-number" id="statTotal">0</div>
                 <div class="admin-stat-label">Всего</div>
             </div>
         </div>
@@ -78,7 +78,7 @@
         <div class="admin-modal-sheet">
             <div class="admin-modal-handle"></div>
             <h3 class="admin-modal-title">Изменить статус</h3>
-            <p class="admin-modal-subtitle" id="modalRequestInfo">Заявка №1 — Иванов И.И.</p>
+            <p class="admin-modal-subtitle" id="modalRequestInfo">Заявка №1</p>
 
             <div class="admin-status-options">
                 <div class="admin-status-option" data-status="new" onclick="selectStatus('new')">
@@ -108,15 +108,27 @@
         </div>
     </div>
 
+    <script src="app.js"></script>
     <script>
-        let requests = [
-            { id: 1, name: 'Иванов Иван Иванович', login: 'ivanov_ii', course: 'Повышение квалификации', date: '15.07.2026', payment: 'Предоплата по QR', status: 'new' },
-            { id: 2, name: 'Петрова Мария Сергеевна', login: 'petrova_ms', course: 'Профпереподготовка', date: '18.07.2026', payment: 'Карта МИР', status: 'new' },
-            { id: 3, name: 'Сидоров Алексей Викторович', login: 'sidorov_av', course: 'Охрана труда', date: '20.07.2026', payment: 'Постоплата в офисе', status: 'new' },
-            { id: 4, name: 'Козлова Елена Дмитриевна', login: 'kozlova_ed', course: 'Повышение квалификации', date: '12.07.2026', payment: 'Карта МИР', status: 'assigned' },
-            { id: 5, name: 'Новиков Дмитрий Андреевич', login: 'novikov_da', course: 'Профпереподготовка', date: '20.07.2026', payment: 'Предоплата по QR', status: 'assigned' },
-            { id: 6, name: 'Морозова Анна Павловна', login: 'morozova_ap', course: 'Охрана труда', date: '10.06.2026', payment: 'Постоплата в офисе', status: 'completed' }
-        ];
+        // Проверка прав администратора
+        if (!requireAdmin()) return;
+
+        // ===== ДАННЫЕ =====
+        let bookings = DB.getBookings();
+        
+        // Если заявок нет, создаем демо-заявки
+        if (bookings.length === 0) {
+            const demoBookings = [
+                { id: 1, user_name: 'Иванов Иван Иванович', user_id: 'ivanov_ii', course: 'Повышение квалификации', date: '15.07.2026', payment: 'Предоплата по QR', status: 'new', created_at: new Date().toISOString() },
+                { id: 2, user_name: 'Петрова Мария Сергеевна', user_id: 'petrova_ms', course: 'Профпереподготовка', date: '18.07.2026', payment: 'Карта МИР', status: 'new', created_at: new Date().toISOString() },
+                { id: 3, user_name: 'Сидоров Алексей Викторович', user_id: 'sidorov_av', course: 'Охрана труда', date: '20.07.2026', payment: 'Постоплата в офисе', status: 'new', created_at: new Date().toISOString() },
+                { id: 4, user_name: 'Козлова Елена Дмитриевна', user_id: 'kozlova_ed', course: 'Повышение квалификации', date: '12.07.2026', payment: 'Карта МИР', status: 'assigned', created_at: new Date().toISOString() },
+                { id: 5, user_name: 'Новиков Дмитрий Андреевич', user_id: 'novikov_da', course: 'Профпереподготовка', date: '20.07.2026', payment: 'Предоплата по QR', status: 'assigned', created_at: new Date().toISOString() },
+                { id: 6, user_name: 'Морозова Анна Павловна', user_id: 'morozova_ap', course: 'Охрана труда', date: '10.06.2026', payment: 'Постоплата в офисе', status: 'completed', created_at: new Date().toISOString() }
+            ];
+            DB.setBookings(demoBookings);
+            bookings = DB.getBookings();
+        }
 
         let currentFilter = 'all';
         let currentSort = 'date-desc';
@@ -131,22 +143,19 @@
             completed: 'Обучение завершено'
         };
 
-        function getInitials(name) {
-            return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-        }
-
         function filterRequests() {
-            let filtered = [...requests];
+            let filtered = [...bookings];
 
             if (currentFilter !== 'all') {
-                filtered = filtered.filter(r => r.status === currentFilter);
+                const filterMap = { 'new': 'new', 'assigned': 'assigned', 'completed': 'completed' };
+                filtered = filtered.filter(r => r.status === filterMap[currentFilter]);
             }
 
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             if (searchTerm) {
                 filtered = filtered.filter(r => 
-                    r.name.toLowerCase().includes(searchTerm) ||
-                    r.login.toLowerCase().includes(searchTerm) ||
+                    r.user_name.toLowerCase().includes(searchTerm) ||
+                    (r.user_id && r.user_id.toLowerCase().includes(searchTerm)) ||
                     r.course.toLowerCase().includes(searchTerm)
                 );
             }
@@ -154,11 +163,11 @@
             filtered.sort((a, b) => {
                 switch(currentSort) {
                     case 'date-desc':
-                        return parseDate(b.date) - parseDate(a.date);
+                        return new Date(b.created_at) - new Date(a.created_at);
                     case 'date-asc':
-                        return parseDate(a.date) - parseDate(b.date);
+                        return new Date(a.created_at) - new Date(b.created_at);
                     case 'name':
-                        return a.name.localeCompare(b.name);
+                        return a.user_name.localeCompare(b.user_name);
                     case 'course':
                         return a.course.localeCompare(b.course);
                     default: return 0;
@@ -166,11 +175,6 @@
             });
 
             return filtered;
-        }
-
-        function parseDate(dateStr) {
-            const parts = dateStr.split('.');
-            return new Date(parts[2], parts[1] - 1, parts[0]);
         }
 
         function renderRequests() {
@@ -185,6 +189,7 @@
             if (pageItems.length === 0) {
                 container.innerHTML = '<div style="text-align:center;padding:40px;color:#CED4DA;"><i class="fas fa-inbox" style="font-size:48px;margin-bottom:12px;opacity:0.5;display:block;"></i><p>Заявки не найдены</p></div>';
                 document.getElementById('pagination').innerHTML = '';
+                updateStats();
                 return;
             }
 
@@ -195,10 +200,10 @@
                 card.innerHTML = `
                     <div class="admin-request-header">
                         <div class="admin-request-user">
-                            <div class="admin-user-avatar">${getInitials(req.name)}</div>
+                            <div class="admin-user-avatar">${getInitials(req.user_name)}</div>
                             <div>
-                                <div class="admin-user-name">${req.name}</div>
-                                <div class="admin-user-login">@${req.login}</div>
+                                <div class="admin-user-name">${req.user_name}</div>
+                                <div class="admin-user-login">${req.user_id || 'user'}</div>
                             </div>
                         </div>
                         <span class="admin-request-badge">${statusLabels[req.status]}</span>
@@ -250,13 +255,18 @@
 
         function updateStats() {
             const counts = { new: 0, assigned: 0, completed: 0 };
-            requests.forEach(r => counts[r.status]++);
+            bookings.forEach(r => {
+                if (r.status === 'new') counts.new++;
+                else if (r.status === 'assigned') counts.assigned++;
+                else if (r.status === 'completed') counts.completed++;
+            });
             document.getElementById('statNew').textContent = counts.new;
             document.getElementById('statAssigned').textContent = counts.assigned;
             document.getElementById('statCompleted').textContent = counts.completed;
-            document.getElementById('statTotal').textContent = requests.length;
+            document.getElementById('statTotal').textContent = bookings.length;
         }
 
+        // Фильтры
         document.querySelectorAll('.admin-filter-chip').forEach(chip => {
             chip.addEventListener('click', function() {
                 document.querySelectorAll('.admin-filter-chip').forEach(c => c.classList.remove('active'));
@@ -277,12 +287,13 @@
             renderRequests();
         });
 
+        // Модальное окно статуса
         const modal = document.getElementById('statusModal');
 
-        function openStatusModal(requestId) {
+        window.openStatusModal = function(requestId) {
             editingRequestId = requestId;
-            const req = requests.find(r => r.id === requestId);
-            document.getElementById('modalRequestInfo').textContent = 'Заявка №' + req.id + ' — ' + req.name;
+            const req = bookings.find(r => r.id === requestId);
+            document.getElementById('modalRequestInfo').textContent = 'Заявка №' + req.id + ' — ' + req.user_name;
 
             selectedNewStatus = req.status;
             document.querySelectorAll('.admin-status-option').forEach(opt => {
@@ -290,26 +301,27 @@
             });
 
             modal.classList.add('active');
-        }
+        };
 
-        function selectStatus(status) {
+        window.selectStatus = function(status) {
             selectedNewStatus = status;
             document.querySelectorAll('.admin-status-option').forEach(opt => {
                 opt.classList.toggle('selected', opt.dataset.status === status);
             });
-        }
+        };
 
-        function confirmStatusChange() {
+        window.confirmStatusChange = function() {
             if (!selectedNewStatus || !editingRequestId) return;
 
-            const req = requests.find(r => r.id === editingRequestId);
+            const req = bookings.find(r => r.id === editingRequestId);
             if (req) {
                 req.status = selectedNewStatus;
-                showToast('Статус заявки №' + req.id + ' изменён на «' + statusLabels[selectedNewStatus] + '»');
+                DB.setBookings(bookings);
+                showToast('Статус заявки №' + req.id + ' изменён на «' + statusLabels[selectedNewStatus] + '»', 'success');
                 renderRequests();
             }
             closeStatusModal();
-        }
+        };
 
         function closeStatusModal() {
             modal.classList.remove('active');
@@ -317,18 +329,11 @@
             selectedNewStatus = null;
         }
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastText = document.getElementById('toastText');
-            toastText.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
         modal.addEventListener('click', e => {
             if (e.target === modal) closeStatusModal();
         });
 
+        // Инициализация
         renderRequests();
     </script>
 </body>
