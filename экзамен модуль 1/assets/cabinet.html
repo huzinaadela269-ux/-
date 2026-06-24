@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет — Учусь.РФ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app-header"></div>
+<div class="container page-transition">
+    <!-- Слайдер -->
+    <div class="slider-container" id="slider">
+        <div class="slider-track" id="sliderTrack">
+            <div class="slide">
+                <div class="slide-content">
+                    <span class="slide-icon">📚</span>
+                    <div class="slide-title">Повышение квалификации</div>
+                    <div class="slide-desc">Обновление знаний для действующих специалистов</div>
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slide-content">
+                    <span class="slide-icon">🎓</span>
+                    <div class="slide-title">Профпереподготовка</div>
+                    <div class="slide-desc">Получение новой профессии и диплома</div>
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slide-content">
+                    <span class="slide-icon">🛡️</span>
+                    <div class="slide-title">Охрана труда</div>
+                    <div class="slide-desc">Обучение безопасным методам работы</div>
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slide-content">
+                    <span class="slide-icon">🏫</span>
+                    <div class="slide-title">Учусь.РФ</div>
+                    <div class="slide-desc">Записывайтесь на курсы онлайн</div>
+                </div>
+            </div>
+        </div>
+        <button class="slider-btn prev" onclick="sliderPrev()">◀</button>
+        <button class="slider-btn next" onclick="sliderNext()">▶</button>
+        <div class="slider-dots" id="sliderDots"></div>
+    </div>
+
+    <div class="card">
+        <h2>Мои заявки</h2>
+        <div id="bookings"></div>
+    </div>
+</div>
+<script src="app.js"></script>
+<script>
+    requireAuth();
+    renderHeader();
+
+    // ===== SLIDER =====
+    let currentSlide = 0;
+    const totalSlides = 4;
+    let sliderInterval;
+
+    function initSlider() {
+        const dotsContainer = document.getElementById('sliderDots');
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+        startSlider();
+    }
+
+    function updateSlider() {
+        const track = document.getElementById('sliderTrack');
+        track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+        document.querySelectorAll('.slider-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === currentSlide);
+        });
+    }
+
+    function goToSlide(n) {
+        currentSlide = n;
+        updateSlider();
+        resetSliderTimer();
+    }
+
+    function sliderNext() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSlider();
+        resetSliderTimer();
+    }
+
+    function sliderPrev() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateSlider();
+        resetSliderTimer();
+    }
+
+    function startSlider() {
+        sliderInterval = setInterval(sliderNext, 3000);
+    }
+
+    function resetSliderTimer() {
+        clearInterval(sliderInterval);
+        startSlider();
+    }
+
+    initSlider();
+
+    // ===== BOOKINGS =====
+    const user = DB.getCurrentUser();
+    const bookings = DB.getBookings().filter(b => b.user_id === user.id).sort((a, b) => b.id - a.id);
+    const courses = getCourses();
+    const reviews = DB.getReviews();
+
+    const box = document.getElementById('bookings');
+    if (!bookings.length) {
+        box.innerHTML = '<div class="empty">Заявок пока нет. <a href="booking.html">Создать заявку</a></div>';
+    } else {
+        box.innerHTML = '<table><thead><tr><th>Курс</th><th>Дата начала</th><th>Оплата</th><th>Статус</th><th>Отзыв</th></tr></thead><tbody>' +
+            bookings.map(b => {
+                const course = courses.find(c => c.id === b.course_id);
+                const statusCls = b.status === 'Новая' ? 'status-new' :
+                                  b.status === 'Идет обучение' ? 'status-assigned' : 'status-done';
+                const myReview = reviews.find(r => r.booking_id === b.id);
+                // Отзыв только после изменения статуса администратором (Идет обучение или Обучение завершено)
+                const canReview = (b.status === 'Идет обучение' || b.status === 'Обучение завершено') && !myReview;
+                let reviewBlock = '';
+                if (myReview) {
+                    reviewBlock = `<div class="review-item">⭐ ${myReview.rating}/5 — ${myReview.comment}</div>`;
+                } else if (canReview) {
+                    reviewBlock = `
+                        <div class="review-form" data-id="${b.id}">
+                            <select class="r-rating">
+                                <option value="5">5 ★</option>
+                                <option value="4">4 ★</option>
+                                <option value="3">3 ★</option>
+                                <option value="2">2 ★</option>
+                                <option value="1">1 ★</option>
+                            </select>
+                            <input type="text" class="r-comment" placeholder="Ваш отзыв...">
+                            <button class="btn btn-sm r-save">Сохранить</button>
+                        </div>`;
+                } else {
+                    reviewBlock = '<span style="color:#888; font-size:13px;">Отзыв будет доступен после подтверждения администратором</span>';
+                }
+                return `<tr>
+                    <td>${course ? course.name : '—'}</td>
+                    <td>${b.start_date}</td>
+                    <td>${b.payment}</td>
+                    <td><span class="status ${statusCls}">${b.status}</span></td>
+                    <td>${reviewBlock}</td>
+                </tr>`;
+            }).join('') +
+            '</tbody></table>';
+    }
+
+    // Обработчики сохранения отзывов
+    document.querySelectorAll('.r-save').forEach(btn => {
+        btn.onclick = () => {
+            const row = btn.closest('.review-form');
+            const booking_id = +row.dataset.id;
+            const rating = +row.querySelector('.r-rating').value;
+            const comment = row.querySelector('.r-comment').value.trim();
+            if (!comment) { notify('Введите текст отзыва', 'error'); return; }
+            const list = DB.getReviews();
+            list.push({ id: Date.now(), booking_id, user_id: user.id, rating, comment, created_at: new Date().toISOString() });
+            DB.setReviews(list);
+            notify('Отзыв сохранён!', 'success');
+            setTimeout(() => location.reload(), 700);
+        };
+    });
+</script>
+</body></html>

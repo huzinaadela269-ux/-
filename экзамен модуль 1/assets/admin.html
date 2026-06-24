@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель — Учусь.РФ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app-header"></div>
+<div class="container page-transition">
+    <div class="card">
+        <h2>Панель администратора</h2>
+
+        <!-- Статистика -->
+        <div class="stats-grid" style="margin-bottom: 24px;">
+            <div class="stat-card">
+                <div class="stat-number" id="stat-total">0</div>
+                <div class="stat-label">Всего заявок</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-new">0</div>
+                <div class="stat-label">Новых</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-assigned">0</div>
+                <div class="stat-label">Идет обучение</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-done">0</div>
+                <div class="stat-label">Обучение завершено</div>
+            </div>
+        </div>
+
+        <!-- Фильтры -->
+        <div class="filter-bar">
+            <label>Фильтр по статусу:</label>
+            <select id="filterStatus">
+                <option value="">Все статусы</option>
+                <option>Новая</option>
+                <option>Идет обучение</option>
+                <option>Обучение завершено</option>
+            </select>
+            <label style="margin-left:8px;">Сортировка:</label>
+            <select id="sortBy">
+                <option value="newest">Сначала новые</option>
+                <option value="oldest">Сначала старые</option>
+                <option value="status">По статусу</option>
+            </select>
+        </div>
+
+        <div id="tableBox"></div>
+    </div>
+</div>
+<script src="app.js"></script>
+<script>
+    requireAdmin();
+    renderHeader();
+    const courses = getCourses();
+
+    function updateStats() {
+        const all = DB.getBookings();
+        document.getElementById('stat-total').textContent = all.length;
+        document.getElementById('stat-new').textContent = all.filter(b => b.status === 'Новая').length;
+        document.getElementById('stat-assigned').textContent = all.filter(b => b.status === 'Идет обучение').length;
+        document.getElementById('stat-done').textContent = all.filter(b => b.status === 'Обучение завершено').length;
+    }
+
+    function render() {
+        const filter = document.getElementById('filterStatus').value;
+        const sort = document.getElementById('sortBy').value;
+        let list = DB.getBookings();
+
+        if (filter) list = list.filter(b => b.status === filter);
+
+        if (sort === 'newest') list.sort((a, b) => b.id - a.id);
+        else if (sort === 'oldest') list.sort((a, b) => a.id - b.id);
+        else if (sort === 'status') {
+            const order = { 'Новая': 1, 'Идет обучение': 2, 'Обучение завершено': 3 };
+            list.sort((a, b) => order[a.status] - order[b.status]);
+        }
+
+        const box = document.getElementById('tableBox');
+        if (!list.length) {
+            box.innerHTML = '<div class="empty">Заявок не найдено</div>';
+            updateStats();
+            return;
+        }
+
+        box.innerHTML = '<table><thead><tr><th>ID</th><th>Пользователь</th><th>Курс</th><th>Дата начала</th><th>Оплата</th><th>Статус</th><th>Действие</th></tr></thead><tbody>' +
+            list.map(b => {
+                const course = courses.find(c => c.id === b.course_id);
+                const statusCls = b.status === 'Новая' ? 'status-new' :
+                                  b.status === 'Идет обучение' ? 'status-assigned' : 'status-done';
+                return `<tr>
+                    <td>#${b.id}</td>
+                    <td><strong>${b.user_name}</strong></td>
+                    <td>${course ? course.name : '—'}</td>
+                    <td>${b.start_date}</td>
+                    <td>${b.payment}</td>
+                    <td><span class="status ${statusCls}">${b.status}</span></td>
+                    <td>
+                        <select data-id="${b.id}" class="status-select">
+                            <option ${b.status==='Новая'?'selected':''}>Новая</option>
+                            <option ${b.status==='Идет обучение'?'selected':''}>Идет обучение</option>
+                            <option ${b.status==='Обучение завершено'?'selected':''}>Обучение завершено</option>
+                        </select>
+                    </td>
+                </tr>`;
+            }).join('') +
+            '</tbody></table>';
+
+        document.querySelectorAll('.status-select').forEach(sel => {
+            sel.onchange = () => {
+                const id = +sel.dataset.id;
+                const all = DB.getBookings();
+                const idx = all.findIndex(b => b.id === id);
+                if (idx >= 0) {
+                    all[idx].status = sel.value;
+                    DB.setBookings(all);
+                    notify('Статус заявки №' + id + ' изменён на «' + sel.value + '»', 'success');
+                    updateStats();
+                    setTimeout(render, 400);
+                }
+            };
+        });
+
+        updateStats();
+    }
+
+    document.getElementById('filterStatus').onchange = render;
+    document.getElementById('sortBy').onchange = render;
+    render();
+</script>
+</body></html>

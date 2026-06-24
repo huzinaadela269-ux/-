@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — Учусь.РФ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app-header"></div>
+<div class="container page-transition">
+    <div class="card" style="max-width:520px; margin: 30px auto;">
+        <h2>Регистрация</h2>
+        <form id="regForm" novalidate>
+            <div class="form-group">
+                <label>Логин</label>
+                <input type="text" id="login" placeholder="ivanov2024 (латиница + цифры, от 6 символов)" required>
+                <div class="error-text" id="err-login"></div>
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="password" placeholder="Минимум 8 символов" required>
+                <div class="error-text" id="err-password"></div>
+            </div>
+            <div class="form-group">
+                <label>ФИО</label>
+                <input type="text" id="fullname" placeholder="Иванов Иван Иванович" required>
+                <div class="error-text" id="err-fullname"></div>
+            </div>
+            <div class="form-group">
+                <label>Контактный телефон</label>
+                <input type="text" id="phone" placeholder="+7 (999) 999-99-99" required>
+                <div class="error-text" id="err-phone"></div>
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" id="email" placeholder="example@mail.ru" required>
+                <div class="error-text" id="err-email"></div>
+            </div>
+            <button type="submit" class="btn" style="width:100%">Зарегистрироваться</button>
+        </form>
+        <div class="link-row">
+            Уже есть аккаунт? <a href="login.html">Войти</a>
+        </div>
+    </div>
+</div>
+<script src="app.js"></script>
+<script>
+    renderHeader();
+    function showErr(id, msg) {
+        const el = document.getElementById('err-' + id);
+        const input = document.getElementById(id);
+        if (msg) {
+            el.textContent = msg;
+            el.classList.add('visible');
+            input.classList.add('error');
+        } else {
+            el.textContent = '';
+            el.classList.remove('visible');
+            input.classList.remove('error');
+        }
+    }
+    document.getElementById('regForm').onsubmit = e => {
+        e.preventDefault();
+        const data = {
+            login:    document.getElementById('login').value.trim(),
+            password: document.getElementById('password').value,
+            fullname: document.getElementById('fullname').value.trim(),
+            phone:    document.getElementById('phone').value.trim(),
+            email:    document.getElementById('email').value.trim()
+        };
+        let ok = true;
+        for (const f of ['login','password','fullname','phone','email']) {
+            const err = Validator[f](data[f]);
+            showErr(f, err);
+            if (err) ok = false;
+        }
+        if (!ok) {
+            notify('Исправьте ошибки в форме', 'error');
+            return;
+        }
+        const users = DB.getUsers();
+        if (users.find(u => u.login === data.login)) {
+            showErr('login', 'Такой логин уже занят');
+            notify('Логин уже занят', 'error');
+            return;
+        }
+        const newUser = {
+            id: Date.now(),
+            ...data,
+            role: 'user'
+        };
+        users.push(newUser);
+        DB.setUsers(users);
+        notify('Регистрация успешна! Теперь войдите в систему.', 'success');
+        setTimeout(() => location.href = 'login.html', 1200);
+    };
+</script>
+</body></html>

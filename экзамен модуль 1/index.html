@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учусь.РФ — Запись на курсы</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div class="welcome-hero">
+        <div class="welcome-hero-content">
+            <h1>Учусь.РФ</h1>
+            <p>Информационная система для записи на онлайн-курсы. Повышение квалификации, профпереподготовка, охрана труда — всё для вашего профессионального роста.</p>
+            <div class="hero-buttons">
+                <button class="hero-btn hero-btn-primary" onclick="location.href='assets/login.html'">Войти</button>
+                <button class="hero-btn hero-btn-secondary" onclick="location.href='assets/register.html'">Регистрация</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="welcome-rooms">
+        <div class="welcome-room-card">
+            <span class="welcome-room-icon">📚</span>
+            <div class="welcome-room-name">Повышение квалификации</div>
+            <div class="welcome-room-desc">Обновление знаний для специалистов с опытом работы</div>
+        </div>
+        <div class="welcome-room-card">
+            <span class="welcome-room-icon">🎓</span>
+            <div class="welcome-room-name">Профпереподготовка</div>
+            <div class="welcome-room-desc">Получение новой профессии с выдачей диплома</div>
+        </div>
+        <div class="welcome-room-card">
+            <span class="welcome-room-icon">🛡️</span>
+            <div class="welcome-room-name">Охрана труда</div>
+            <div class="welcome-room-desc">Обучение безопасным методам работы на производстве</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <div class="footer-title">Учусь.РФ</div>
+            <div class="footer-info">
+                📍 г. Москва, ул. Образцовая, д. 10<br>
+                📞 Горячая линия: <a href="tel:+74951234567">+7 (495) 123-45-67</a><br>
+                <span style="opacity:0.6;">© 2026 Все права защищены</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/app.js"></script>
+    <script>
+        const u = DB.getCurrentUser();
+        if (u) location.href = u.role === 'admin' ? 'assets/admin.html' : 'assets/cabinet.html';
+    </script>
+</body>
+</html>

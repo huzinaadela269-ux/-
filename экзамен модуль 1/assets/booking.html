@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявка на курс — Учусь.РФ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app-header"></div>
+<div class="container page-transition">
+    <div class="card" style="max-width:520px; margin: 30px auto;">
+        <h2>Заявка на курс</h2>
+        <form id="bookForm" novalidate>
+            <div class="form-group">
+                <label>Курс</label>
+                <select id="course" required>
+                    <option value="">— выберите курс —</option>
+                </select>
+                <div class="error-text" id="err-course"></div>
+            </div>
+            <div class="form-group">
+                <label>Дата начала обучения (ДД.ММ.ГГГГ)</label>
+                <input type="text" id="startDate" placeholder="01.01.2026" maxlength="10" required>
+                <div class="error-text" id="err-date"></div>
+            </div>
+            <div class="form-group">
+                <label>Способ оплаты</label>
+                <select id="payment" required>
+                    <option value="">— выберите способ оплаты —</option>
+                    <option value="Предоплата по QR-коду">Предоплата по QR-коду</option>
+                    <option value="Оплата картой МИР">Оплата картой МИР</option>
+                    <option value="Постоплата в офисе">Постоплата в офисе организации</option>
+                </select>
+                <div class="error-text" id="err-payment"></div>
+            </div>
+            <button type="submit" class="btn" style="width:100%">Отправить заявку</button>
+        </form>
+    </div>
+</div>
+<script src="app.js"></script>
+<script>
+    requireAuth();
+    renderHeader();
+
+    // Заполняем список курсов
+    const courseSel = document.getElementById('course');
+    getCourses().forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name + ' — ' + c.description;
+        courseSel.appendChild(opt);
+    });
+
+    // Маска даты ДД.ММ.ГГГГ
+    const dateInput = document.getElementById('startDate');
+    dateInput.addEventListener('input', function(e) {
+        let val = this.value.replace(/\D/g, '');
+        if (val.length >= 2) val = val.slice(0,2) + '.' + val.slice(2);
+        if (val.length >= 5) val = val.slice(0,5) + '.' + val.slice(5,9);
+        this.value = val;
+    });
+
+    function showErr(id, msg) {
+        const el = document.getElementById('err-' + id);
+        const input = id === 'course' ? document.getElementById('course') :
+                      id === 'payment' ? document.getElementById('payment') :
+                      id === 'date' ? document.getElementById('startDate') : null;
+        if (msg) {
+            el.textContent = msg;
+            el.classList.add('visible');
+            if (input) input.classList.add('error');
+        } else {
+            el.textContent = '';
+            el.classList.remove('visible');
+            if (input) input.classList.remove('error');
+        }
+    }
+
+    document.getElementById('bookForm').onsubmit = e => {
+        e.preventDefault();
+        // Сброс ошибок
+        ['course','date','payment'].forEach(f => showErr(f, null));
+
+        const user = DB.getCurrentUser();
+        const course_id = +document.getElementById('course').value;
+        const start_date = document.getElementById('startDate').value.trim();
+        const payment = document.getElementById('payment').value;
+
+        let ok = true;
+        if (!course_id) { showErr('course', 'Выберите курс'); ok = false; }
+        if (!start_date) { showErr('date', 'Введите дату'); ok = false; }
+        else if (!/^\d{2}\.\d{2}\.\d{4}$/.test(start_date)) {
+            showErr('date', 'Формат: ДД.ММ.ГГГГ'); ok = false;
+        }
+        if (!payment) { showErr('payment', 'Выберите способ оплаты'); ok = false; }
+
+        if (!ok) {
+            notify('Заполните все обязательные поля', 'error');
+            return;
+        }
+
+        const booking = {
+            id: Date.now(),
+            user_id: user.id,
+            user_name: user.fullname,
+            course_id: course_id,
+            start_date: start_date,
+            payment: payment,
+            status: 'Новая',
+            created_at: new Date().toISOString()
+        };
+        const list = DB.getBookings();
+        list.push(booking);
+        DB.setBookings(list);
+        notify('Заявка отправлена на согласование!', 'success');
+        setTimeout(() => location.href = 'cabinet.html', 900);
+    };
+</script>
+</body></html>
