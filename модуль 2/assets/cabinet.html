@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Личный кабинет — Учусь.РФ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-gray: #343A40;
+            --light-gray: #CED4DA;
+            --green: #28A745;
+            --white: #FFFFFF;
+            --error: #DC3545;
+            --warning: #FFC107;
+            --info: #17A2B8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-gray);
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--green), #218838);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .slider-section { padding: 20px; }
+
+        .slider-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            height: 220px;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            background: var(--primary-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .slide-content {
+            color: var(--white);
+            z-index: 2;
+            position: relative;
+        }
+
+        .slide-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .slide-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .slide-desc {
+            font-size: 13px;
+            font-weight: 300;
+            opacity: 0.85;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-gray);
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .slider-btn:hover {
+            background: var(--white);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-btn.prev { left: 12px; }
+        .slider-btn.next { right: 12px; }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .dot.active {
+            background: var(--green);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .content-section { padding: 0 20px; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-gray);
+        }
+
+        .btn-new {
+            background: var(--green);
+            color: var(--white);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+        }
+
+        .requests-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .request-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-left: 4px solid var(--light-gray);
+            transition: all 0.3s;
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .request-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .request-card.status-new { border-left-color: var(--info); }
+        .request-card.status-assigned { border-left-color: var(--warning); }
+        .request-card.status-completed { border-left-color: var(--green); }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .request-course {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-gray);
+        }
+
+        .request-status {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .status-new .request-status {
+            background: #e3f2fd;
+            color: var(--info);
+        }
+
+        .status-assigned .request-status {
+            background: #fff8e1;
+            color: #f57c00;
+        }
+
+        .status-completed .request-status {
+            background: #e8f5e9;
+            color: var(--green);
+        }
+
+        .request-details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .request-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .request-detail i {
+            width: 16px;
+            text-align: center;
+            color: var(--light-gray);
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-review {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--green);
+            background: transparent;
+            color: var(--green);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-review:hover {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .btn-review:disabled {
+            border-color: var(--light-gray);
+            color: var(--light-gray);
+            cursor: not-allowed;
+        }
+
+        .btn-review:disabled:hover {
+            background: transparent;
+            color: var(--light-gray);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-content {
+            background: var(--white);
+            width: 100%;
+            max-width: 390px;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-gray);
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: #f8f9fa;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-gray);
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover { background: #e9ecef; }
+
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: center;
+        }
+
+        .star {
+            font-size: 32px;
+            color: var(--light-gray);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .star.active { color: var(--warning); }
+        .star:hover { transform: scale(1.2); }
+
+        .review-textarea {
+            width: 100%;
+            min-height: 100px;
+            border: 2px solid #e9ecef;
+            border-radius: 14px;
+            padding: 12px;
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.3s;
+            margin-bottom: 16px;
+        }
+
+        .review-textarea:focus { border-color: var(--green); }
+
+        .btn-submit-review {
+            width: 100%;
+            height: 50px;
+            background: var(--green);
+            border: none;
+            border-radius: 14px;
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit-review:hover { background: #218838; }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+            z-index: 99;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 16px;
+            color: var(--light-gray);
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--green); }
+        .nav-item:hover { color: var(--green); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--light-gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .empty-state p { font-size: 14px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <img src="images/etazhi-logotip-vektor-48.jpg" alt="Logo" class="header-logo-img">
+            <div class="header-title">Личный кабинет</div>
+        </div>
+        <div class="header-user">
+            <div class="user-avatar" id="userAvatar">У</div>
+        </div>
+    </header>
+
+    <section class="slider-section">
+        <div class="slider-container">
+            <div class="slider-track" id="sliderTrack">
+                <div class="slide" style="background: linear-gradient(135deg, #1a237e, #0d47a1);">
+                    <div class="slide-content">
+                        <span class="slide-icon">📚</span>
+                        <div class="slide-title">Повышение квалификации</div>
+                        <div class="slide-desc">Обновление знаний для действующих специалистов</div>
+                    </div>
+                </div>
+                <div class="slide" style="background: linear-gradient(135deg, #004d40, #00695c);">
+                    <div class="slide-content">
+                        <span class="slide-icon">🎓</span>
+                        <div class="slide-title">Профпереподготовка</div>
+                        <div class="slide-desc">Получение новой профессии и диплома</div>
+                    </div>
+                </div>
+                <div class="slide" style="background: linear-gradient(135deg, #b71c1c, #c62828);">
+                    <div class="slide-content">
+                        <span class="slide-icon">🛡️</span>
+                        <div class="slide-title">Охрана труда</div>
+                        <div class="slide-desc">Обучение безопасным методам работы</div>
+                    </div>
+                </div>
+                <div class="slide" style="background: linear-gradient(135deg, #1a237e, #283593);">
+                    <div class="slide-content">
+                        <span class="slide-icon">🏫</span>
+                        <div class="slide-title">Учусь.РФ</div>
+                        <div class="slide-desc">Записывайтесь на курсы онлайн</div>
+                    </div>
+                </div>
+            </div>
+            <button class="slider-btn prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+            <button class="slider-btn next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="slider-dots" id="sliderDots"></div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-header">
+            <h2 class="section-title">Мои заявки</h2>
+            <button class="btn-new" onclick="location.href='booking.html'">
+                <i class="fas fa-plus"></i>Новая заявка
+            </button>
+        </div>
+
+        <div class="requests-list" id="requestsList">
+            <div class="request-card status-new">
+                <div class="request-header">
+                    <div class="request-course"><i class="fas fa-graduation-cap" style="margin-right: 8px; color: var(--info);"></i>Повышение квалификации</div>
+                    <span class="request-status">Новая</span>
+                </div>
+                <div class="request-details">
+                    <div class="request-detail"><i class="fas fa-calendar-alt"></i>15.07.2026</div>
+                    <div class="request-detail"><i class="fas fa-credit-card"></i>Предоплата по QR</div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn-review" disabled>
+                        <i class="fas fa-lock"></i>Отзыв недоступен
+                    </button>
+                </div>
+            </div>
+
+            <div class="request-card status-assigned">
+                <div class="request-header">
+                    <div class="request-course"><i class="fas fa-briefcase" style="margin-right: 8px; color: var(--warning);"></i>Профпереподготовка</div>
+                    <span class="request-status">Идет обучение</span>
+                </div>
+                <div class="request-details">
+                    <div class="request-detail"><i class="fas fa-calendar-alt"></i>20.07.2026</div>
+                    <div class="request-detail"><i class="fas fa-credit-card"></i>Карта МИР</div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn-review" disabled>
+                        <i class="fas fa-lock"></i>Отзыв недоступен
+                    </button>
+                </div>
+            </div>
+
+            <div class="request-card status-completed">
+                <div class="request-header">
+                    <div class="request-course"><i class="fas fa-shield-alt" style="margin-right: 8px; color: var(--green);"></i>Охрана труда</div>
+                    <span class="request-status">Обучение завершено</span>
+                </div>
+                <div class="request-details">
+                    <div class="request-detail"><i class="fas fa-calendar-alt"></i>10.06.2026</div>
+                    <div class="request-detail"><i class="fas fa-credit-card"></i>Постоплата в офисе</div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn-review" onclick="openReviewModal('Охрана труда')">
+                        <i class="fas fa-star"></i>Оставить отзыв
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal-overlay" id="reviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Оставить отзыв</h3>
+                <button class="modal-close" onclick="closeReviewModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p style="text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 16px;" id="reviewCourseName">Охрана труда</p>
+            <div class="rating-stars" id="ratingStars">
+                <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
+                <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
+                <span class="star" data-rating="3"><i class="fas fa-star"></i></span>
+                <span class="star" data-rating="4"><i class="fas fa-star"></i></span>
+                <span class="star" data-rating="5"><i class="fas fa-star"></i></span>
+            </div>
+            <textarea class="review-textarea" placeholder="Расскажите о вашем опыте обучения..."></textarea>
+            <button class="btn-submit-review" onclick="submitReview()">
+                <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>Отправить отзыв
+            </button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="location.href='cabinet.html'">
+            <i class="fas fa-user"></i>
+            <span>Кабинет</span>
+        </button>
+        <button class="nav-item" onclick="location.href='booking.html'">
+            <i class="fas fa-calendar-plus"></i>
+            <span>Заявка</span>
+        </button>
+        <button class="nav-item" onclick="location.href='login.html'">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Выход</span>
+        </button>
+    </nav>
+
+    <script>
+        const sliderTrack = document.getElementById('sliderTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('sliderDots');
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        let autoSlideInterval;
+
+        slides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlider() {
+            sliderTrack.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            if (currentSlide >= totalSlides) currentSlide = 0;
+            updateSlider();
+            resetAutoSlide();
+        }
+
+        function nextSlide() { goToSlide(currentSlide + 1); }
+        function prevSlide() { goToSlide(currentSlide - 1); }
+
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextSlide, 3000);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        sliderTrack.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        sliderTrack.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) nextSlide();
+            if (touchEndX - touchStartX > 50) prevSlide();
+        });
+
+        startAutoSlide();
+
+        const modal = document.getElementById('reviewModal');
+        const reviewCourseName = document.getElementById('reviewCourseName');
+        const stars = document.querySelectorAll('.star');
+        let selectedRating = 0;
+
+        function openReviewModal(courseName) {
+            reviewCourseName.textContent = courseName;
+            modal.classList.add('active');
+            selectedRating = 0;
+            updateStars();
+        }
+
+        function closeReviewModal() {
+            modal.classList.remove('active');
+        }
+
+        function updateStars() {
+            stars.forEach((star, i) => {
+                star.classList.toggle('active', i < selectedRating);
+            });
+        }
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.dataset.rating);
+                updateStars();
+            });
+        });
+
+        function submitReview() {
+            if (selectedRating === 0) {
+                alert('Поставьте оценку');
+                return;
+            }
+            closeReviewModal();
+            const toast = document.createElement('div');
+            toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#28A745;color:#fff;padding:14px 24px;border-radius:12px;z-index:2000;font-size:14px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,0.15);animation:fadeIn 0.3s;';
+            toast.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i>Отзыв отправлен!';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeReviewModal();
+        });
+
+        const currentUserData = localStorage.getItem('currentUser');
+        if (currentUserData) {
+            try {
+                const user = JSON.parse(currentUserData);
+                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'У';
+                document.getElementById('userAvatar').textContent = initials;
+            } catch(e) {}
+        }
+    </script>
+</body>
+</html>
