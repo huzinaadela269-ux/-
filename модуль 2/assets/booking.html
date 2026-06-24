@@ -21,9 +21,7 @@
             </div>
             <h3 class="success-title">Заявка создана!</h3>
             <p class="success-text">Ваша заявка на обучение отправлена на согласование администратору. Мы уведомим вас о результате.</p>
-            <button class="btn-success" onclick="closeSuccessModal()">
-                <i class="fas fa-arrow-right" style="margin-right: 8px;"></i>Перейти в кабинет
-            </button>
+            <button class="btn-success">Перейти в кабинет</button>
         </div>
     </div>
 
@@ -43,9 +41,6 @@
                     <div class="select-wrapper">
                         <select class="form-select" id="courseSelect">
                             <option value="" disabled selected>Выберите курс</option>
-                            <option value="qualification">Повышение квалификации</option>
-                            <option value="retraining">Профессиональная переподготовка</option>
-                            <option value="safety">Охрана труда</option>
                         </select>
                     </div>
                 </div>
@@ -60,7 +55,7 @@
 
                 <div class="input-group">
                     <label class="input-label">Способ оплаты</label>
-                    <div class="payment-options">
+                    <div class="payment-options" id="paymentContainer">
                         <div class="payment-option" data-payment="qr">
                             <div class="payment-radio"><i class="fas fa-check"></i></div>
                             <div class="payment-info">
@@ -112,62 +107,6 @@
         </button>
     </nav>
 
-    <script>
-        const dateInput = document.getElementById('dateInput');
-        const paymentOptions = document.querySelectorAll('.payment-option');
-        let selectedPayment = null;
-
-        dateInput.addEventListener('input', function(e) {
-            let val = e.target.value.replace(/\D/g, '');
-            let formatted = '';
-            if (val.length > 0) formatted += val.substring(0, 2);
-            if (val.length >= 2) formatted += '.' + val.substring(2, 4);
-            if (val.length >= 4) formatted += '.' + val.substring(4, 8);
-            e.target.value = formatted;
-        });
-
-        paymentOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                paymentOptions.forEach(o => o.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedPayment = this.dataset.payment;
-            });
-        });
-
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            if (!document.getElementById('courseSelect').value) {
-                showToast('Выберите курс');
-                return;
-            }
-            if (!dateInput.value || dateInput.value.length < 10) {
-                showToast('Введите корректную дату');
-                return;
-            }
-            if (!selectedPayment) {
-                showToast('Выберите способ оплаты');
-                return;
-            }
-
-            document.getElementById('successModal').classList.add('active');
-        });
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastText = document.getElementById('toastText');
-            toastText.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function closeSuccessModal() {
-            window.location.href = 'cabinet.html';
-        }
-
-        document.getElementById('successModal').addEventListener('click', function(e) {
-            if (e.target === this) closeSuccessModal();
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>

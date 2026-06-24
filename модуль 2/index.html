@@ -54,18 +54,6 @@
         </div>
     </div>
 
-    <script>
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-            try {
-                const user = JSON.parse(currentUser);
-                if (user.role === 'admin') {
-                    window.location.href = 'assets/admin.html';
-                } else {
-                    window.location.href = 'assets/cabinet.html';
-                }
-            } catch(e) {}
-        }
-    </script>
+    <script src="assets/app.js"></script>
 </body>
 </html>

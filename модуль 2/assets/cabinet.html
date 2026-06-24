@@ -65,55 +65,7 @@
             </button>
         </div>
 
-        <div class="requests-list" id="requestsList">
-            <div class="request-card status-new">
-                <div class="request-header">
-                    <div class="request-course"><i class="fas fa-graduation-cap" style="margin-right: 8px; color: var(--info);"></i>Повышение квалификации</div>
-                    <span class="request-status">Новая</span>
-                </div>
-                <div class="request-details">
-                    <div class="request-detail"><i class="fas fa-calendar-alt"></i>15.07.2026</div>
-                    <div class="request-detail"><i class="fas fa-credit-card"></i>Предоплата по QR</div>
-                </div>
-                <div class="request-actions">
-                    <button class="btn-review" disabled>
-                        <i class="fas fa-lock"></i>Отзыв недоступен
-                    </button>
-                </div>
-            </div>
-
-            <div class="request-card status-assigned">
-                <div class="request-header">
-                    <div class="request-course"><i class="fas fa-briefcase" style="margin-right: 8px; color: var(--warning);"></i>Профпереподготовка</div>
-                    <span class="request-status">Идет обучение</span>
-                </div>
-                <div class="request-details">
-                    <div class="request-detail"><i class="fas fa-calendar-alt"></i>20.07.2026</div>
-                    <div class="request-detail"><i class="fas fa-credit-card"></i>Карта МИР</div>
-                </div>
-                <div class="request-actions">
-                    <button class="btn-review" disabled>
-                        <i class="fas fa-lock"></i>Отзыв недоступен
-                    </button>
-                </div>
-            </div>
-
-            <div class="request-card status-completed">
-                <div class="request-header">
-                    <div class="request-course"><i class="fas fa-shield-alt" style="margin-right: 8px; color: var(--green);"></i>Охрана труда</div>
-                    <span class="request-status">Обучение завершено</span>
-                </div>
-                <div class="request-details">
-                    <div class="request-detail"><i class="fas fa-calendar-alt"></i>10.06.2026</div>
-                    <div class="request-detail"><i class="fas fa-credit-card"></i>Постоплата в офисе</div>
-                </div>
-                <div class="request-actions">
-                    <button class="btn-review" onclick="openReviewModal('Охрана труда')">
-                        <i class="fas fa-star"></i>Оставить отзыв
-                    </button>
-                </div>
-            </div>
-        </div>
+        <div class="requests-list" id="requestsList"></div>
     </section>
 
     <div class="modal-overlay" id="reviewModal">
@@ -124,7 +76,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <p style="text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 16px;" id="reviewCourseName">Охрана труда</p>
+            <p style="text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 16px;" id="reviewCourseName">Курс</p>
             <div class="rating-stars" id="ratingStars">
                 <span class="star" data-rating="1"><i class="fas fa-star"></i></span>
                 <span class="star" data-rating="2"><i class="fas fa-star"></i></span>
@@ -133,9 +85,7 @@
                 <span class="star" data-rating="5"><i class="fas fa-star"></i></span>
             </div>
             <textarea class="review-textarea" placeholder="Расскажите о вашем опыте обучения..."></textarea>
-            <button class="btn-submit-review" onclick="submitReview()">
-                <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>Отправить отзыв
-            </button>
+            <button class="btn-submit-review" onclick="submitReview()">Отправить отзыв</button>
         </div>
     </div>
 
@@ -154,124 +104,6 @@
         </button>
     </nav>
 
-    <script>
-        const sliderTrack = document.getElementById('sliderTrack');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const dotsContainer = document.getElementById('sliderDots');
-        const slides = document.querySelectorAll('.slide');
-        let currentSlide = 0;
-        const totalSlides = slides.length;
-        let autoSlideInterval;
-
-        slides.forEach((_, i) => {
-            const dot = document.createElement('button');
-            dot.className = 'dot' + (i === 0 ? ' active' : '');
-            dot.onclick = () => goToSlide(i);
-            dotsContainer.appendChild(dot);
-        });
-
-        const dots = document.querySelectorAll('.dot');
-
-        function updateSlider() {
-            sliderTrack.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentSlide);
-            });
-        }
-
-        function goToSlide(index) {
-            currentSlide = index;
-            if (currentSlide < 0) currentSlide = totalSlides - 1;
-            if (currentSlide >= totalSlides) currentSlide = 0;
-            updateSlider();
-            resetAutoSlide();
-        }
-
-        function nextSlide() { goToSlide(currentSlide + 1); }
-        function prevSlide() { goToSlide(currentSlide - 1); }
-
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(nextSlide, 3000);
-        }
-
-        function resetAutoSlide() {
-            clearInterval(autoSlideInterval);
-            startAutoSlide();
-        }
-
-        prevBtn.addEventListener('click', prevSlide);
-        nextBtn.addEventListener('click', nextSlide);
-
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        sliderTrack.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        sliderTrack.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            if (touchStartX - touchEndX > 50) nextSlide();
-            if (touchEndX - touchStartX > 50) prevSlide();
-        });
-
-        startAutoSlide();
-
-        const modal = document.getElementById('reviewModal');
-        const reviewCourseName = document.getElementById('reviewCourseName');
-        const stars = document.querySelectorAll('.star');
-        let selectedRating = 0;
-
-        function openReviewModal(courseName) {
-            reviewCourseName.textContent = courseName;
-            modal.classList.add('active');
-            selectedRating = 0;
-            updateStars();
-        }
-
-        function closeReviewModal() {
-            modal.classList.remove('active');
-        }
-
-        function updateStars() {
-            stars.forEach((star, i) => {
-                star.classList.toggle('active', i < selectedRating);
-            });
-        }
-
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                selectedRating = parseInt(star.dataset.rating);
-                updateStars();
-            });
-        });
-
-        function submitReview() {
-            if (selectedRating === 0) {
-                alert('Поставьте оценку');
-                return;
-            }
-            closeReviewModal();
-            const toast = document.createElement('div');
-            toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#28A745;color:#fff;padding:14px 24px;border-radius:12px;z-index:2000;font-size:14px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,0.15);animation:fadeIn 0.3s;';
-            toast.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i>Отзыв отправлен!';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        modal.addEventListener('click', e => {
-            if (e.target === modal) closeReviewModal();
-        });
-
-        const currentUserData = localStorage.getItem('currentUser');
-        if (currentUserData) {
-            try {
-                const user = JSON.parse(currentUserData);
-                const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'У';
-                document.getElementById('userAvatar').textContent = initials;
-            } catch(e) {}
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>

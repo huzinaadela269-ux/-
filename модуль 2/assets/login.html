@@ -9,14 +9,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Toast уведомление -->
     <div class="toast" id="toast">
         <i class="fas fa-exclamation-circle"></i>
         <span id="toastText">Ошибка</span>
     </div>
 
-    <!-- Логотип -->
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;">
+    <div class="page-center">
         <div class="logo-container">
             <img src="images/etazhi-logotip-vektor-48.jpg" alt="Учусь.РФ" class="logo-img">
             <div class="brand-name">Учусь.РФ</div>
@@ -69,86 +67,6 @@
         </div>
     </div>
 
-    <script>
-        const demoUsers = [
-            { login: 'Admin26', password: 'Demo20', role: 'admin', name: 'Администратор' },
-            { login: 'user2026', password: 'password', role: 'user', name: 'Иванов Иван Иванович' }
-        ];
-
-        function getRegisteredUsers() {
-            const stored = localStorage.getItem('registeredUsers');
-            return stored ? JSON.parse(stored) : [];
-        }
-
-        const form = document.getElementById('loginForm');
-        const loginInput = document.getElementById('login');
-        const passwordInput = document.getElementById('password');
-        const errorMsg = document.getElementById('errorMsg');
-        const toast = document.getElementById('toast');
-        const toastText = document.getElementById('toastText');
-
-        function showToast(message, type) {
-            toastText.textContent = message;
-            toast.className = 'toast ' + (type || '');
-            toast.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function showError() {
-            errorMsg.classList.add('visible');
-            loginInput.classList.add('error');
-            passwordInput.classList.add('error');
-            showToast('Неверный логин или пароль');
-            setTimeout(() => {
-                loginInput.classList.remove('error');
-                passwordInput.classList.remove('error');
-            }, 600);
-        }
-
-        loginInput.addEventListener('input', () => {
-            errorMsg.classList.remove('visible');
-            loginInput.classList.remove('error');
-        });
-        passwordInput.addEventListener('input', () => {
-            errorMsg.classList.remove('visible');
-            passwordInput.classList.remove('error');
-        });
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const login = loginInput.value.trim();
-            const password = passwordInput.value.trim();
-
-            if (!login || !password) {
-                showToast('Заполните все поля');
-                return;
-            }
-
-            const demoUser = demoUsers.find(u => u.login === login && u.password === password);
-            if (demoUser) {
-                localStorage.setItem('currentUser', JSON.stringify(demoUser));
-                if (demoUser.role === 'admin') {
-                    window.location.href = 'admin.html';
-                } else {
-                    window.location.href = 'cabinet.html';
-                }
-                return;
-            }
-
-            const registeredUsers = getRegisteredUsers();
-            const regUser = registeredUsers.find(u => u.login === login && u.password === password);
-            if (regUser) {
-                localStorage.setItem('currentUser', JSON.stringify(regUser));
-                showToast('Вход выполнен успешно!', 'success');
-                setTimeout(() => {
-                    window.location.href = 'cabinet.html';
-                }, 800);
-                return;
-            }
-
-            showError();
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
