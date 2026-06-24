@@ -1,7 +1,60 @@
 /* ============================================
+   ПОДКЛЮЧЕНИЕ ШРИФТОВ
+   ============================================ */
+   @font-face {
+    font-family: 'Inter';
+    src: url('./fonts/Inter-Regular.woff2') format('woff2'),
+         url('./fonts/Inter-Regular.woff') format('woff'),
+         url('./fonts/Inter-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('./fonts/Inter-Medium.woff2') format('woff2'),
+         url('./fonts/Inter-Medium.woff') format('woff'),
+         url('./fonts/Inter-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('./fonts/Inter-SemiBold.woff2') format('woff2'),
+         url('./fonts/Inter-SemiBold.woff') format('woff'),
+         url('./fonts/Inter-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('./fonts/Inter-Bold.woff2') format('woff2'),
+         url('./fonts/Inter-Bold.woff') format('woff'),
+         url('./fonts/Inter-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('./fonts/Inter-Light.woff2') format('woff2'),
+         url('./fonts/Inter-Light.woff') format('woff'),
+         url('./fonts/Inter-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ============================================
    ОБЩИЕ СТИЛИ
    ============================================ */
-   :root {
+:root {
     --primary-gray: #343A40;
     --light-gray: #CED4DA;
     --green: #28A745;
@@ -14,10 +67,11 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
     background: #f8f9fa;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ============================================
@@ -121,6 +175,7 @@ body {
     color: var(--primary-gray);
     margin-bottom: 28px;
     text-align: center;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .input-group {
@@ -135,6 +190,7 @@ body {
     color: var(--primary-gray);
     margin-bottom: 6px;
     padding-left: 4px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .input-wrapper { position: relative; }
@@ -156,7 +212,7 @@ body {
     border-radius: 14px;
     padding: 0 16px 0 44px;
     font-size: 16px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     color: var(--primary-gray);
     background: #f8f9fa;
     transition: all 0.3s ease;
@@ -186,7 +242,7 @@ body {
     border-radius: 14px;
     padding: 0 44px 0 16px;
     font-size: 16px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     color: var(--primary-gray);
     background: #f8f9fa;
     transition: all 0.3s ease;
@@ -231,6 +287,7 @@ body {
     align-items: center;
     gap: 4px;
     animation: fadeIn 0.3s ease;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .error-hint.visible { display: flex; }
@@ -250,6 +307,7 @@ body {
     font-size: 13px;
     font-weight: 500;
     animation: fadeIn 0.3s ease;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .error-message.visible { display: flex; }
@@ -266,7 +324,7 @@ body {
     color: var(--white);
     font-size: 16px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     margin-top: 8px;
     box-shadow: 0 4px 16px rgba(40, 167, 69, 0.3);
@@ -304,7 +362,7 @@ body {
     color: var(--white);
     font-size: 16px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     margin-top: 8px;
     box-shadow: 0 4px 16px rgba(40, 167, 69, 0.3);
@@ -330,7 +388,7 @@ body {
     border-radius: 12px;
     font-size: 13px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -353,7 +411,7 @@ body {
     color: var(--white);
     font-size: 16px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     transition: all 0.3s;
 }
@@ -368,6 +426,7 @@ body {
     margin-top: 20px;
     font-size: 14px;
     color: var(--light-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .link-text a {
@@ -414,6 +473,7 @@ body {
     color: #2e7d32;
     text-align: center;
     animation: fadeIn 0.5s ease;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .demo-hint strong { display: block; margin-bottom: 4px; font-size: 13px; }
@@ -441,6 +501,7 @@ body {
     font-weight: 700;
     color: var(--primary-gray);
     letter-spacing: -0.5px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .brand-subtitle {
@@ -448,6 +509,7 @@ body {
     font-weight: 300;
     color: var(--light-gray);
     margin-top: 4px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 /* ============================================
@@ -496,6 +558,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .toast.show {
@@ -558,6 +621,7 @@ body {
     font-weight: 700;
     color: var(--primary-gray);
     margin-bottom: 8px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .success-text {
@@ -565,6 +629,7 @@ body {
     color: var(--light-gray);
     margin-bottom: 24px;
     line-height: 1.5;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 /* ============================================
@@ -630,12 +695,14 @@ body {
     font-size: 14px;
     font-weight: 500;
     color: var(--primary-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .payment-desc {
     font-size: 12px;
     color: var(--light-gray);
     margin-top: 2px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .payment-icon {
@@ -694,12 +761,14 @@ body {
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 4px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .slide-desc {
     font-size: 13px;
     font-weight: 300;
     opacity: 0.85;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .slider-btn {
@@ -769,6 +838,7 @@ body {
     font-size: 20px;
     font-weight: 700;
     color: var(--primary-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .requests-list {
@@ -807,6 +877,7 @@ body {
     font-size: 16px;
     font-weight: 700;
     color: var(--primary-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .request-status {
@@ -816,6 +887,7 @@ body {
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .status-new .request-status {
@@ -846,6 +918,7 @@ body {
     gap: 8px;
     font-size: 13px;
     color: #6c757d;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .request-detail i {
@@ -868,7 +941,7 @@ body {
     border-radius: 10px;
     font-size: 13px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
@@ -933,6 +1006,7 @@ body {
     font-size: 20px;
     font-weight: 700;
     color: var(--primary-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .modal-close {
@@ -975,7 +1049,7 @@ body {
     border-radius: 14px;
     padding: 12px;
     font-size: 14px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     resize: vertical;
     outline: none;
     transition: border-color 0.3s;
@@ -993,7 +1067,7 @@ body {
     color: var(--white);
     font-size: 16px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     transition: all 0.3s;
 }
@@ -1030,7 +1104,7 @@ body {
     border: none;
     background: none;
     cursor: pointer;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .nav-item i { font-size: 20px; }
@@ -1090,6 +1164,7 @@ body {
     text-align: center;
     padding: 40px 20px;
     color: var(--light-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .empty-state i {
@@ -1146,6 +1221,7 @@ body {
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 8px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .hero-subtitle {
@@ -1155,6 +1231,7 @@ body {
     max-width: 300px;
     margin: 0 auto 24px;
     line-height: 1.6;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .hero-buttons {
@@ -1169,7 +1246,7 @@ body {
     border-radius: 14px;
     font-size: 16px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     border: none;
     transition: all 0.3s;
@@ -1237,6 +1314,7 @@ body {
     font-weight: 700;
     color: var(--primary-gray);
     margin-bottom: 4px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .feature-desc {
@@ -1244,6 +1322,7 @@ body {
     color: var(--light-gray);
     font-weight: 300;
     line-height: 1.4;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .footer {
@@ -1258,6 +1337,7 @@ body {
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 8px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .footer-info {
@@ -1265,6 +1345,7 @@ body {
     font-weight: 300;
     opacity: 0.8;
     line-height: 1.8;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .footer-info a {
@@ -1306,12 +1387,14 @@ body {
 .admin-brand .header-title {
     font-size: 18px;
     font-weight: 700;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-brand .header-subtitle {
     font-size: 12px;
     font-weight: 300;
     opacity: 0.8;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-stats {
@@ -1338,12 +1421,14 @@ body {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 2px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-stat-label {
     font-size: 11px;
     font-weight: 300;
     opacity: 0.9;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .logout-btn {
@@ -1390,7 +1475,7 @@ body {
     border-radius: 12px;
     padding: 0 16px 0 40px;
     font-size: 14px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     outline: none;
     transition: all 0.3s;
 }
@@ -1417,7 +1502,7 @@ body {
     background: var(--white);
     font-size: 13px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.3s;
@@ -1447,6 +1532,7 @@ body {
 .admin-sort-label {
     font-size: 13px;
     color: var(--light-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-sort-select {
@@ -1455,7 +1541,7 @@ body {
     font-size: 13px;
     font-weight: 500;
     color: var(--primary-gray);
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     outline: none;
 }
@@ -1524,11 +1610,13 @@ body {
     font-size: 14px;
     font-weight: 700;
     color: var(--primary-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-user-login {
     font-size: 12px;
     color: var(--light-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-request-badge {
@@ -1538,6 +1626,7 @@ body {
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .status-new .admin-request-badge {
@@ -1568,6 +1657,7 @@ body {
     gap: 8px;
     font-size: 13px;
     color: #6c757d;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-detail-cell i {
@@ -1590,7 +1680,7 @@ body {
     border-radius: 10px;
     font-size: 12px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     border: 2px solid;
     transition: all 0.3s;
@@ -1643,7 +1733,7 @@ body {
     border-radius: 10px;
     font-size: 14px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1708,12 +1798,14 @@ body {
     font-weight: 700;
     color: var(--primary-gray);
     margin-bottom: 8px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-modal-subtitle {
     font-size: 14px;
     color: var(--light-gray);
     margin-bottom: 20px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-status-options {
@@ -1764,12 +1856,14 @@ body {
     font-size: 15px;
     font-weight: 700;
     color: var(--primary-gray);
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-status-desc {
     font-size: 12px;
     color: var(--light-gray);
     margin-top: 2px;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .admin-btn-confirm {
@@ -1781,7 +1875,7 @@ body {
     color: var(--white);
     font-size: 16px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', 'Roboto', sans-serif;
     cursor: pointer;
     transition: all 0.3s;
 }
