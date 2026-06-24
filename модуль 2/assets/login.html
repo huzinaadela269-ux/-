@@ -6,322 +6,75 @@
     <title>Вход — Учусь.РФ</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --primary-gray: #343A40;
-            --light-gray: #CED4DA;
-            --green: #28A745;
-            --white: #FFFFFF;
-            --error: #DC3545;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .logo-container {
-            margin-bottom: 30px;
-            text-align: center;
-            animation: fadeInDown 0.6s ease;
-        }
-
-        .logo-img {
-            width: 90px;
-            height: 90px;
-            object-fit: contain;
-            margin-bottom: 12px;
-            filter: drop-shadow(0 4px 12px rgba(40, 167, 69, 0.3));
-            animation: pulse 2s infinite;
-        }
-
-        .brand-name {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-gray);
-        }
-
-        .brand-subtitle {
-            font-size: 12px;
-            font-weight: 300;
-            color: var(--light-gray);
-            margin-top: 4px;
-        }
-
-        .form-card {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 36px 28px;
-            width: 100%;
-            max-width: 360px;
-            box-shadow: 0 10px 40px rgba(52, 58, 64, 0.08);
-            animation: fadeInUp 0.6s ease 0.2s both;
-        }
-
-        .form-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-gray);
-            margin-bottom: 28px;
-            text-align: center;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .input-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--primary-gray);
-            margin-bottom: 6px;
-            padding-left: 4px;
-        }
-
-        .input-wrapper { position: relative; }
-
-        .input-wrapper i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--light-gray);
-            font-size: 16px;
-            transition: color 0.3s;
-        }
-
-        .form-input {
-            width: 100%;
-            height: 54px;
-            border: 2px solid #e9ecef;
-            border-radius: 14px;
-            padding: 0 16px 0 44px;
-            font-size: 16px;
-            font-family: 'Roboto', sans-serif;
-            color: var(--primary-gray);
-            background: #f8f9fa;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: var(--green);
-            background: var(--white);
-            box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.1);
-        }
-        .form-input:focus + i, .input-wrapper:focus-within i { color: var(--green); }
-        .form-input.error { border-color: var(--error); animation: shake 0.4s ease; }
-
-        .error-message {
-            background: #fff5f5;
-            border: 1px solid #feb2b2;
-            border-radius: 10px;
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            display: none;
-            align-items: center;
-            gap: 10px;
-            color: var(--error);
-            font-size: 13px;
-            font-weight: 500;
-            animation: fadeIn 0.3s ease;
-        }
-        .error-message.visible { display: flex; }
-
-        .btn-primary {
-            width: 100%;
-            height: 54px;
-            background: linear-gradient(135deg, var(--green) 0%, #218838 100%);
-            border: none;
-            border-radius: 14px;
-            color: var(--white);
-            font-size: 16px;
-            font-weight: 500;
-            font-family: 'Roboto', sans-serif;
-            cursor: pointer;
-            margin-top: 8px;
-            box-shadow: 0 4px 16px rgba(40, 167, 69, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(40, 167, 69, 0.4);
-        }
-        .btn-primary:active { transform: translateY(0); }
-
-        .link-text {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 14px;
-            color: var(--light-gray);
-        }
-        .link-text a {
-            color: var(--green);
-            text-decoration: none;
-            font-weight: 500;
-            position: relative;
-        }
-        .link-text a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px; left: 0;
-            width: 0; height: 2px;
-            background: var(--green);
-            transition: width 0.3s;
-        }
-        .link-text a:hover::after { width: 100%; }
-
-        .admin-link {
-            text-align: center;
-            margin-top: 16px;
-            font-size: 12px;
-        }
-        .admin-link a {
-            color: var(--light-gray);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .admin-link a:hover { color: var(--primary-gray); }
-
-        .demo-hint {
-            background: #e8f5e9;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            font-size: 12px;
-            color: #2e7d32;
-            text-align: center;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .demo-hint strong { display: block; margin-bottom: 4px; font-size: 13px; }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-8px); }
-            40% { transform: translateX(8px); }
-            60% { transform: translateX(-4px); }
-            80% { transform: translateX(4px); }
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px; left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: var(--error);
-            color: var(--white);
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            z-index: 1000;
-            opacity: 0;
-            transition: all 0.4s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-        .toast.success { background: var(--green); }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Toast уведомление -->
     <div class="toast" id="toast">
         <i class="fas fa-exclamation-circle"></i>
         <span id="toastText">Ошибка</span>
     </div>
 
-    <div class="logo-container">
-        <img src="images/etazhi-logotip-vektor-48.jpg" alt="Учусь.РФ" class="logo-img">
-        <div class="brand-name">Учусь.РФ</div>
-        <div class="brand-subtitle">Запись на онлайн-курсы</div>
-    </div>
-
-    <div class="form-card">
-        <h1 class="form-title">Вход в систему</h1>
-
-        <div class="demo-hint">
-            <strong>Демо-доступ:</strong>
-            Пользователь: <b>user2026</b> / <b>password</b><br>
-            Администратор: <b>Admin26</b> / <b>Demo20</b>
+    <!-- Логотип -->
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;">
+        <div class="logo-container">
+            <img src="images/etazhi-logotip-vektor-48.jpg" alt="Учусь.РФ" class="logo-img">
+            <div class="brand-name">Учусь.РФ</div>
+            <div class="brand-subtitle">Запись на онлайн-курсы</div>
         </div>
 
-        <div class="error-message" id="errorMsg">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span>Неверный логин или пароль</span>
-        </div>
+        <div class="form-card">
+            <h1 class="form-title">Вход в систему</h1>
 
-        <form id="loginForm">
-            <div class="input-group">
-                <label class="input-label">Логин</label>
-                <div class="input-wrapper">
-                    <input type="text" class="form-input" id="login" placeholder="Введите логин">
-                    <i class="fas fa-user-circle"></i>
-                </div>
+            <div class="demo-hint">
+                <strong>Демо-доступ:</strong>
+                Пользователь: <b>user2026</b> / <b>password</b><br>
+                Администратор: <b>Admin26</b> / <b>Demo20</b>
             </div>
 
-            <div class="input-group">
-                <label class="input-label">Пароль</label>
-                <div class="input-wrapper">
-                    <input type="password" class="form-input" id="password" placeholder="Введите пароль">
-                    <i class="fas fa-lock"></i>
-                </div>
+            <div class="error-message" id="errorMsg">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Неверный логин или пароль</span>
             </div>
 
-            <button type="submit" class="btn-primary">
-                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>Войти
-            </button>
-        </form>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label class="input-label">Логин</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-input" id="login" placeholder="Введите логин">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
 
-        <div class="link-text">
-            Ещё не зарегистрированы? <a href="register.html">Регистрация</a>
-        </div>
+                <div class="input-group">
+                    <label class="input-label">Пароль</label>
+                    <div class="input-wrapper">
+                        <input type="password" class="form-input" id="password" placeholder="Введите пароль">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
 
-        <div class="admin-link">
-            <a href="admin.html"><i class="fas fa-shield-alt" style="margin-right: 4px;"></i>Панель администратора</a>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>Войти
+                </button>
+            </form>
+
+            <div class="link-text">
+                Ещё не зарегистрированы? <a href="register.html">Регистрация</a>
+            </div>
+
+            <div class="admin-link">
+                <a href="admin.html"><i class="fas fa-shield-alt" style="margin-right: 4px;"></i>Панель администратора</a>
+            </div>
         </div>
     </div>
 
     <script>
-        // Demo users database
         const demoUsers = [
             { login: 'Admin26', password: 'Demo20', role: 'admin', name: 'Администратор' },
             { login: 'user2026', password: 'password', role: 'user', name: 'Иванов Иван Иванович' }
         ];
 
-        // Load registered users from localStorage
         function getRegisteredUsers() {
             const stored = localStorage.getItem('registeredUsers');
             return stored ? JSON.parse(stored) : [];
@@ -372,7 +125,6 @@
                 return;
             }
 
-            // Check demo users
             const demoUser = demoUsers.find(u => u.login === login && u.password === password);
             if (demoUser) {
                 localStorage.setItem('currentUser', JSON.stringify(demoUser));
@@ -384,7 +136,6 @@
                 return;
             }
 
-            // Check registered users from localStorage
             const registeredUsers = getRegisteredUsers();
             const regUser = registeredUsers.find(u => u.login === login && u.password === password);
             if (regUser) {

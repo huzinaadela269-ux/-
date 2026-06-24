@@ -6,270 +6,7 @@
     <title>Регистрация — Учусь.РФ</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --primary-gray: #343A40;
-            --light-gray: #CED4DA;
-            --green: #28A745;
-            --white: #FFFFFF;
-            --error: #DC3545;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .logo-container {
-            margin-bottom: 24px;
-            text-align: center;
-            animation: fadeInDown 0.6s ease;
-        }
-
-        .logo-img {
-            width: 90px;
-            height: 90px;
-            object-fit: contain;
-            margin-bottom: 12px;
-            filter: drop-shadow(0 4px 12px rgba(40, 167, 69, 0.3));
-            animation: pulse 2s infinite;
-        }
-
-        .brand-name {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-gray);
-            letter-spacing: -0.5px;
-        }
-
-        .brand-subtitle {
-            font-size: 12px;
-            font-weight: 300;
-            color: var(--light-gray);
-            margin-top: 4px;
-        }
-
-        .form-card {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 32px 24px;
-            width: 100%;
-            max-width: 360px;
-            box-shadow: 0 10px 40px rgba(52, 58, 64, 0.08);
-            animation: fadeInUp 0.6s ease 0.2s both;
-        }
-
-        .form-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-gray);
-            margin-bottom: 24px;
-            text-align: center;
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-            position: relative;
-            animation: fadeInUp 0.5s ease both;
-        }
-
-        .input-group:nth-child(2) { animation-delay: 0.1s; }
-        .input-group:nth-child(3) { animation-delay: 0.15s; }
-        .input-group:nth-child(4) { animation-delay: 0.2s; }
-        .input-group:nth-child(5) { animation-delay: 0.25s; }
-        .input-group:nth-child(6) { animation-delay: 0.3s; }
-
-        .input-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--primary-gray);
-            margin-bottom: 6px;
-            padding-left: 4px;
-        }
-
-        .input-wrapper { position: relative; }
-
-        .input-wrapper i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--light-gray);
-            font-size: 16px;
-            transition: color 0.3s;
-        }
-
-        .form-input {
-            width: 100%;
-            height: 52px;
-            border: 2px solid #e9ecef;
-            border-radius: 14px;
-            padding: 0 16px 0 44px;
-            font-size: 16px;
-            font-family: 'Roboto', sans-serif;
-            color: var(--primary-gray);
-            background: #f8f9fa;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: var(--green);
-            background: var(--white);
-            box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.1);
-        }
-
-        .form-input:focus + i, .input-wrapper:focus-within i { color: var(--green); }
-        .form-input.error { border-color: var(--error); animation: shake 0.4s ease; }
-        .form-input.error + i { color: var(--error); }
-
-        .error-hint {
-            font-size: 11px;
-            color: var(--error);
-            margin-top: 4px;
-            padding-left: 4px;
-            display: none;
-            align-items: center;
-            gap: 4px;
-            animation: fadeIn 0.3s ease;
-        }
-        .error-hint.visible { display: flex; }
-        .hint-icon { font-size: 10px; }
-
-        .btn-primary {
-            width: 100%;
-            height: 54px;
-            background: linear-gradient(135deg, var(--green) 0%, #218838 100%);
-            border: none;
-            border-radius: 14px;
-            color: var(--white);
-            font-size: 16px;
-            font-weight: 500;
-            font-family: 'Roboto', sans-serif;
-            cursor: pointer;
-            margin-top: 8px;
-            box-shadow: 0 4px 16px rgba(40, 167, 69, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(40, 167, 69, 0.4);
-        }
-        .btn-primary:active { transform: translateY(0); }
-
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 0; height: 0;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        .btn-primary:active::after { width: 300px; height: 300px; }
-
-        .link-text {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: var(--light-gray);
-        }
-        .link-text a {
-            color: var(--green);
-            text-decoration: none;
-            font-weight: 500;
-            position: relative;
-        }
-        .link-text a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px; left: 0;
-            width: 0; height: 2px;
-            background: var(--green);
-            transition: width 0.3s;
-        }
-        .link-text a:hover::after { width: 100%; }
-
-        .password-strength {
-            height: 4px;
-            background: #e9ecef;
-            border-radius: 2px;
-            margin-top: 6px;
-            overflow: hidden;
-            display: none;
-        }
-        .password-strength.visible { display: block; }
-        .password-strength-bar {
-            height: 100%;
-            width: 0;
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-        .strength-weak { background: var(--error); width: 33%; }
-        .strength-medium { background: #ffc107; width: 66%; }
-        .strength-strong { background: var(--green); width: 100%; }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-8px); }
-            40% { transform: translateX(8px); }
-            60% { transform: translateX(-4px); }
-            80% { transform: translateX(4px); }
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px; left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: var(--primary-gray);
-            color: var(--white);
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            z-index: 1000;
-            opacity: 0;
-            transition: all 0.4s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-        .toast.success { background: var(--green); }
-        .toast.error { background: var(--error); }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="toast" id="toast">
@@ -277,86 +14,88 @@
         <span id="toastText">Сообщение</span>
     </div>
 
-    <div class="logo-container">
-        <img src="images/etazhi-logotip-vektor-48.jpg" alt="Учусь.РФ" class="logo-img">
-        <div class="brand-name">Учусь.РФ</div>
-        <div class="brand-subtitle">Запись на онлайн-курсы</div>
-    </div>
+    <div class="page-center">
+        <div class="logo-container">
+            <img src="images/etazhi-logotip-vektor-48.jpg" alt="Учусь.РФ" class="logo-img">
+            <div class="brand-name">Учусь.РФ</div>
+            <div class="brand-subtitle">Запись на онлайн-курсы</div>
+        </div>
 
-    <div class="form-card">
-        <h1 class="form-title">Регистрация</h1>
+        <div class="form-card">
+            <h1 class="form-title">Регистрация</h1>
 
-        <form id="registerForm">
-            <div class="input-group">
-                <label class="input-label">ФИО</label>
-                <div class="input-wrapper">
-                    <input type="text" class="form-input" id="fullName" placeholder="Иванов Иван Иванович">
-                    <i class="fas fa-user"></i>
+            <form id="registerForm">
+                <div class="input-group">
+                    <label class="input-label">ФИО</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-input" id="fullName" placeholder="Иванов Иван Иванович">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="error-hint" id="fullNameError">
+                        <i class="fas fa-exclamation-circle hint-icon"></i>
+                        <span>Введите полное ФИО</span>
+                    </div>
                 </div>
-                <div class="error-hint" id="fullNameError">
-                    <i class="fas fa-exclamation-circle hint-icon"></i>
-                    <span>Введите полное ФИО</span>
+
+                <div class="input-group">
+                    <label class="input-label">Логин</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-input" id="login" placeholder="min 6 символов, латиница и цифры">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="error-hint" id="loginError">
+                        <i class="fas fa-exclamation-circle hint-icon"></i>
+                        <span>Минимум 6 символов, только латиница и цифры</span>
+                    </div>
                 </div>
+
+                <div class="input-group">
+                    <label class="input-label">Пароль</label>
+                    <div class="input-wrapper">
+                        <input type="password" class="form-input" id="password" placeholder="Минимум 8 символов">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="password-strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div class="error-hint" id="passwordError">
+                        <i class="fas fa-exclamation-circle hint-icon"></i>
+                        <span>Пароль должен содержать минимум 8 символов</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Телефон</label>
+                    <div class="input-wrapper">
+                        <input type="tel" class="form-input" id="phone" placeholder="+7 (999) 999-99-99">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="error-hint" id="phoneError">
+                        <i class="fas fa-exclamation-circle hint-icon"></i>
+                        <span>Введите корректный номер телефона</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">E-mail</label>
+                    <div class="input-wrapper">
+                        <input type="email" class="form-input" id="email" placeholder="example@mail.ru">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="error-hint" id="emailError">
+                        <i class="fas fa-exclamation-circle hint-icon"></i>
+                        <span>Введите корректный e-mail</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-user-plus" style="margin-right: 8px;"></i>Создать аккаунт
+                </button>
+            </form>
+
+            <div class="link-text">
+                Уже есть аккаунт? <a href="login.html">Войти</a>
             </div>
-
-            <div class="input-group">
-                <label class="input-label">Логин</label>
-                <div class="input-wrapper">
-                    <input type="text" class="form-input" id="login" placeholder="min 6 символов, латиница и цифры">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-                <div class="error-hint" id="loginError">
-                    <i class="fas fa-exclamation-circle hint-icon"></i>
-                    <span>Минимум 6 символов, только латиница и цифры</span>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">Пароль</label>
-                <div class="input-wrapper">
-                    <input type="password" class="form-input" id="password" placeholder="Минимум 8 символов">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <div class="password-strength" id="passwordStrength">
-                    <div class="password-strength-bar" id="strengthBar"></div>
-                </div>
-                <div class="error-hint" id="passwordError">
-                    <i class="fas fa-exclamation-circle hint-icon"></i>
-                    <span>Пароль должен содержать минимум 8 символов</span>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">Телефон</label>
-                <div class="input-wrapper">
-                    <input type="tel" class="form-input" id="phone" placeholder="+7 (999) 999-99-99">
-                    <i class="fas fa-phone"></i>
-                </div>
-                <div class="error-hint" id="phoneError">
-                    <i class="fas fa-exclamation-circle hint-icon"></i>
-                    <span>Введите корректный номер телефона</span>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">E-mail</label>
-                <div class="input-wrapper">
-                    <input type="email" class="form-input" id="email" placeholder="example@mail.ru">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div class="error-hint" id="emailError">
-                    <i class="fas fa-exclamation-circle hint-icon"></i>
-                    <span>Введите корректный e-mail</span>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-primary">
-                <i class="fas fa-user-plus" style="margin-right: 8px;"></i>Создать аккаунт
-            </button>
-        </form>
-
-        <div class="link-text">
-            Уже есть аккаунт? <a href="login.html">Войти</a>
         </div>
     </div>
 
